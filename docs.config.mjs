@@ -1,6 +1,6 @@
 export default {
   siteName: "Rootree 文档",
-  siteDescription: "Rootreemc是由go开发的高性能服务端",
+  siteDescription: "Rootreemc是由go开发的高性能Minecraft服务端",
   docsDir: "docs",
   outDir: "dist",
   base: "/",
@@ -16,13 +16,12 @@ export default {
     rightButtons: [
       {
         text: "GitHub",
-        link: "https://github.com/hekuo5310/rootreemc-docs",
+        link: "https://github.com/Xiao-QDev/RootreeMC",
         newTab: true
       }
     ]
   },
   nav: [
     { text: "首页", link: "/" },
-    { text: "指南", link: "/guide/getting-started/" }
   ]
 };
