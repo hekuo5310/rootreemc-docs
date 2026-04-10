@@ -4,6 +4,8 @@
   --text: #000000;
   --muted: #4d4d4d;
   --border: #000000;
+  --radius-sm: 10px;
+  --radius-md: 14px;
   --font-sans: "IBM Plex Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: "IBM Plex Mono", "JetBrains Mono", "Consolas", monospace;
 }
@@ -44,6 +46,7 @@ a {
   padding: 14px 24px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .brand {
@@ -67,6 +70,7 @@ a {
   padding: 0 14px;
   border: 1px solid var(--border);
   text-decoration: none;
+  border-radius: var(--radius-sm);
 }
 
 .nav-link.active {
@@ -82,6 +86,7 @@ a {
   padding: 0 12px;
   font-family: inherit;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .layout {
@@ -94,6 +99,7 @@ a {
   border-right: 1px solid var(--border);
   padding: 20px;
   background: var(--surface);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .sidebar-group + .sidebar-group {
@@ -120,6 +126,7 @@ a {
   padding: 6px 8px;
   border: 1px solid transparent;
   text-decoration: none;
+  border-radius: var(--radius-sm);
 }
 
 .sidebar-link.active {
@@ -178,6 +185,7 @@ a {
   border: 1px solid #000000;
   display: inline-block;
   position: relative;
+  border-radius: 4px;
 }
 
 .doc .task-list-item.checked .task-list-marker::after {
@@ -201,6 +209,7 @@ a {
   border: 1px solid var(--border);
   padding: 14px;
   overflow-x: auto;
+  border-radius: var(--radius-sm);
 }
 
 .doc code {
@@ -211,6 +220,7 @@ a {
   margin: 1.2rem 0;
   padding: 0.4rem 0 0.4rem 1rem;
   border-left: 2px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .doc .admonition {
@@ -219,6 +229,7 @@ a {
   border: 1px solid var(--border);
   background: #ffffff;
   color: #000000;
+  border-radius: var(--radius-sm);
 }
 
 .doc .admonition-title {
@@ -262,12 +273,14 @@ a {
   border: 1px solid var(--border);
   text-decoration: none;
   padding: 0 12px;
+  border-radius: var(--radius-sm);
 }
 
 .toc {
   border-left: 1px solid var(--border);
   padding: 20px;
   background: var(--surface);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 
 .toc h2 {
