@@ -23,7 +23,7 @@ export default {
   },
   i18n: {
     enabled: true,
-    endpoint: "https://deepl.io.hk.cn/translate",
+    endpoint: "/api/translate",
     sourceLang: "zh",
     defaultLang: "zh",
     altCount: 2,

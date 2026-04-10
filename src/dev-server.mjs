@@ -2,6 +2,7 @@ import { promises as fs, watch } from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { buildSite } from "./build-site.mjs";
+import { proxyTranslateRequest } from "./translate-proxy.mjs";
 
 const MIME_BY_EXT = {
   ".css": "text/css; charset=utf-8",
@@ -21,6 +22,11 @@ export async function watchAndServe(rootDir, options = {}) {
   const server = http.createServer(async (req, res) => {
     try {
       const requestUrl = new URL(req.url, `http://${req.headers.host}`);
+      if (requestUrl.pathname === "/api/translate") {
+        await handleTranslateProxy(req, res);
+        return;
+      }
+
       const safePath = resolveRequestPath(outDir, requestUrl.pathname);
       if (!safePath) {
         res.writeHead(400, { "Content-Type": "text/plain; charset=utf-8" });
@@ -118,4 +124,53 @@ async function findServedFile(outDir, candidatePath) {
   }
 
   return null;
+}
+
+async function handleTranslateProxy(req, res) {
+  setCorsHeaders(res);
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  if (req.method !== "POST") {
+    res.writeHead(405, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ code: 405, message: "Method Not Allowed" }));
+    return;
+  }
+
+  const rawBody = await readRequestBody(req);
+  const parsedBody = parseJsonSafely(rawBody);
+  const result = await proxyTranslateRequest(parsedBody);
+
+  res.writeHead(result.status, { "Content-Type": "application/json; charset=utf-8" });
+  res.end(JSON.stringify(result.payload));
+}
+
+function readRequestBody(req) {
+  return new Promise((resolve) => {
+    let raw = "";
+    req.on("data", (chunk) => {
+      raw += chunk;
+    });
+    req.on("end", () => resolve(raw));
+    req.on("error", () => resolve(""));
+  });
+}
+
+function parseJsonSafely(raw) {
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+function setCorsHeaders(res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 }

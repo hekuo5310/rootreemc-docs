@@ -27,7 +27,7 @@ const DEFAULT_CONFIG = {
   },
   i18n: {
     enabled: false,
-    endpoint: "https://deepl.io.hk.cn/translate",
+    endpoint: "/api/translate",
     sourceLang: "zh",
     defaultLang: "zh",
     altCount: 0,

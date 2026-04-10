@@ -226,7 +226,7 @@ function normalizeI18nConfig(i18n) {
     endpoint:
       typeof source.endpoint === "string" && source.endpoint.trim()
         ? source.endpoint.trim()
-        : "https://deepl.io.hk.cn/translate",
+        : "/api/translate",
     sourceLang,
     defaultLang,
     altCount: normalizeAltCount(source.altCount),
@@ -279,4 +279,3 @@ function normalizeHeaderBackground(background) {
   const normalized = background.trim().toLowerCase();
   return SUPPORTED_HEADER_BACKGROUNDS.has(normalized) ? normalized : "solid";
 }
-

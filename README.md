@@ -123,7 +123,7 @@ export default {
   },
   i18n: {
     enabled: true,
-    endpoint: "https://deepl.io.hk.cn/translate",
+    endpoint: "/api/translate",
     sourceLang: "zh",
     defaultLang: "zh",
     altCount: 2,
@@ -139,7 +139,11 @@ export default {
 
 ## i18n 自动翻译
 
-用户切换语言后，前端会自动调用 `POST /translate` 接口翻译页面文本。默认示例接口为：
+用户切换语言后，前端会自动调用 `POST /api/translate` 接口翻译页面文本。默认示例接口为：
+
+`/api/translate`（同源代理）
+
+其中 `/api/translate` 会在服务端转发到：
 
 `https://deepl.io.hk.cn/translate`
 
