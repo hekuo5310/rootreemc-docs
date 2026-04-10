@@ -95,7 +95,34 @@ order: 2
 
 ## 配置
 
-在 `docs.config.mjs` 中配置站点标题、输出目录与导航项。
+在 `docs.config.mjs` 中配置站点标题、输出目录、导航项和 Header：
+
+```js
+export default {
+  siteName: "Rootree 文档",
+  siteDescription: "Rootreemc是由go开发的高性能服务端",
+  docsDir: "docs",
+  outDir: "dist",
+  nav: [
+    { text: "首页", link: "/" },
+    { text: "指南", link: "/guide/getting-started/" }
+  ],
+  header: {
+    sticky: true,                // 是否固定在顶部
+    background: "solid",         // solid | transparent | striped
+    logo: {
+      text: "Rootree 文档",      // logo 文本
+      link: "/",                 // 点击跳转
+      image: "",                 // 可选，logo 图片地址
+      alt: "Rootree 文档"
+    },
+    rightButtons: [
+      { text: "GitHub", link: "https://github.com/hekuo5310/rootreemc-docs", newTab: true },
+      { text: "开始阅读", link: "/guide/getting-started/", style: "filled" } // style: outline | filled
+    ]
+  }
+};
+```
 
 ## 测试
 

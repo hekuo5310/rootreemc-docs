@@ -36,30 +36,108 @@ a {
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   display: flex;
   align-items: center;
   gap: 16px;
   justify-content: space-between;
   padding: 14px 24px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 0;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
+.topbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar-static {
+  position: relative;
+}
+
+.topbar-bg-solid {
+  background: #ffffff;
+}
+
+.topbar-bg-transparent {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.topbar-bg-striped {
+  background-color: #ffffff;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.04) 0,
+    rgba(0, 0, 0, 0.04) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 700;
   text-decoration: none;
   color: var(--text);
   letter-spacing: 0.02em;
 }
 
+.brand-image-wrap {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .top-nav {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--text);
+  background: #ffffff;
+}
+
+.header-action.filled {
+  background: #000000;
+  color: #ffffff;
 }
 
 .nav-link {
@@ -328,7 +406,20 @@ a {
     flex-wrap: wrap;
   }
 
+  .topbar-right {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   .top-nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .header-actions {
     width: 100%;
     overflow-x: auto;
     padding-bottom: 6px;

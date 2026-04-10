@@ -14,6 +14,17 @@ const DEFAULT_CONFIG = {
   docsDir: "docs",
   outDir: "dist",
   base: "/",
+  header: {
+    sticky: true,
+    background: "solid",
+    logo: {
+      text: "",
+      link: "/",
+      image: "",
+      alt: ""
+    },
+    rightButtons: []
+  },
   nav: []
 };
 
@@ -75,6 +86,7 @@ export async function buildSite(rootDir) {
     const html = renderPage({
       siteName: config.siteName,
       siteDescription: config.siteDescription,
+      header: config.header,
       page: doc,
       navItems,
       sidebarGroups,
@@ -112,9 +124,22 @@ async function loadConfig(rootDir) {
   const stat = await fs.stat(configPath);
   const moduleUrl = `${pathToFileURL(configPath).href}?mtime=${stat.mtimeMs}`;
   const userConfig = (await import(moduleUrl)).default || {};
+  const mergedHeader = {
+    ...DEFAULT_CONFIG.header,
+    ...(userConfig.header || {}),
+    logo: {
+      ...DEFAULT_CONFIG.header.logo,
+      ...((userConfig.header && userConfig.header.logo) || {})
+    },
+    rightButtons: Array.isArray(userConfig.header?.rightButtons)
+      ? userConfig.header.rightButtons
+      : DEFAULT_CONFIG.header.rightButtons
+  };
+
   return {
     ...DEFAULT_CONFIG,
-    ...userConfig
+    ...userConfig,
+    header: mergedHeader
   };
 }
 
