@@ -21,6 +21,19 @@ export default {
       }
     ]
   },
+  i18n: {
+    enabled: true,
+    endpoint: "https://deepl.io.hk.cn/translate",
+    sourceLang: "zh",
+    defaultLang: "zh",
+    altCount: 2,
+    cache: true,
+    autoApplySaved: true,
+    languages: [
+      { code: "zh", label: "简体中文" },
+      { code: "en", label: "English" }
+    ]
+  },
   nav: [
     { text: "首页", link: "/" },
   ]

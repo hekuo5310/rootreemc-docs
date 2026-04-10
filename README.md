@@ -120,9 +120,36 @@ export default {
       { text: "GitHub", link: "https://github.com/hekuo5310/rootreemc-docs", newTab: true },
       { text: "开始阅读", link: "/guide/getting-started/", style: "filled" } // style: outline | filled
     ]
+  },
+  i18n: {
+    enabled: true,
+    endpoint: "https://deepl.io.hk.cn/translate",
+    sourceLang: "zh",
+    defaultLang: "zh",
+    altCount: 2,
+    cache: true,
+    autoApplySaved: true,
+    languages: [
+      { code: "zh", label: "简体中文" },
+      { code: "en", label: "English" }
+    ]
   }
 };
 ```
+
+## i18n 自动翻译
+
+用户切换语言后，前端会自动调用 `POST /translate` 接口翻译页面文本。默认示例接口为：
+
+`https://deepl.io.hk.cn/translate`
+
+请求体字段：
+- `text`：要翻译的文本（必填）
+- `source_lang`：源语言代码（可选）
+- `target_lang`：目标语言代码（必填）
+- `alt_count`：替代翻译数量（可选，最多 3）
+
+系统会自动缓存翻译结果，并在用户下次访问时优先使用缓存。
 
 ## 测试
 

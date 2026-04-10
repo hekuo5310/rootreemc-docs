@@ -25,6 +25,19 @@ const DEFAULT_CONFIG = {
     },
     rightButtons: []
   },
+  i18n: {
+    enabled: false,
+    endpoint: "https://deepl.io.hk.cn/translate",
+    sourceLang: "zh",
+    defaultLang: "zh",
+    altCount: 0,
+    cache: true,
+    autoApplySaved: true,
+    languages: [
+      { code: "zh", label: "简体中文" },
+      { code: "en", label: "English" }
+    ]
+  },
   nav: []
 };
 
@@ -87,6 +100,7 @@ export async function buildSite(rootDir) {
       siteName: config.siteName,
       siteDescription: config.siteDescription,
       header: config.header,
+      i18n: config.i18n,
       page: doc,
       navItems,
       sidebarGroups,
@@ -135,11 +149,19 @@ async function loadConfig(rootDir) {
       ? userConfig.header.rightButtons
       : DEFAULT_CONFIG.header.rightButtons
   };
+  const mergedI18n = {
+    ...DEFAULT_CONFIG.i18n,
+    ...(userConfig.i18n || {}),
+    languages: Array.isArray(userConfig.i18n?.languages)
+      ? userConfig.i18n.languages
+      : DEFAULT_CONFIG.i18n.languages
+  };
 
   return {
     ...DEFAULT_CONFIG,
     ...userConfig,
-    header: mergedHeader
+    header: mergedHeader,
+    i18n: mergedI18n
   };
 }
 

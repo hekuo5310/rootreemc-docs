@@ -19,6 +19,19 @@ test("renderPage should render custom header settings", () => {
         { text: "GitHub", link: "https://example.com", newTab: true, style: "filled" }
       ]
     },
+    i18n: {
+      enabled: true,
+      endpoint: "https://deepl.io.hk.cn/translate",
+      sourceLang: "zh",
+      defaultLang: "zh",
+      altCount: 2,
+      cache: true,
+      autoApplySaved: true,
+      languages: [
+        { code: "zh", label: "简体中文" },
+        { code: "en", label: "English" }
+      ]
+    },
     page: {
       title: "Home",
       route: "/",
@@ -35,6 +48,9 @@ test("renderPage should render custom header settings", () => {
   assert.match(html, /class="brand-image"/);
   assert.match(html, /class="header-action filled"/);
   assert.match(html, /target="_blank"/);
+  assert.match(html, /data-i18n-switcher/);
+  assert.match(html, /id="i18n-config"/);
+  assert.match(html, /"endpoint":"https:\/\/deepl\.io\.hk\.cn\/translate"/);
 });
 
 test("renderPage should fallback to default header background", () => {
@@ -43,6 +59,9 @@ test("renderPage should fallback to default header background", () => {
     siteDescription: "desc",
     header: {
       background: "unknown"
+    },
+    i18n: {
+      enabled: false
     },
     page: {
       title: "Home",
@@ -57,5 +76,5 @@ test("renderPage should fallback to default header background", () => {
   });
 
   assert.match(html, /class="topbar topbar-sticky topbar-bg-solid"/);
+  assert.doesNotMatch(html, /data-i18n-switcher/);
 });
-

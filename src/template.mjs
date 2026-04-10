@@ -7,6 +7,7 @@ export function renderPage(payload) {
     siteName,
     siteDescription,
     header,
+    i18n,
     page,
     navItems,
     sidebarGroups,
@@ -16,6 +17,7 @@ export function renderPage(payload) {
   const pageTitle = `${page.title} | ${siteName}`;
   const displayToc = page.toc.filter((item) => item.level >= 2 && item.level <= 3);
   const headerConfig = normalizeHeaderConfig(siteName, header);
+  const i18nConfig = normalizeI18nConfig(i18n);
   const topbarClassName = [
     "topbar",
     headerConfig.sticky ? "topbar-sticky" : "topbar-static",
@@ -53,9 +55,12 @@ export function renderPage(payload) {
   const pagerHtml = renderPager(previousPage, nextPage);
   const brandHtml = renderBrand(headerConfig.logo, siteName);
   const rightButtonsHtml = renderRightButtons(headerConfig.rightButtons);
+  const i18nControlHtml = renderI18nControl(i18nConfig);
+  const headerUtilityHtml = renderHeaderUtility(i18nControlHtml, rightButtonsHtml);
+  const i18nConfigScript = renderI18nConfigScript(i18nConfig);
 
   return `<!doctype html>
-<html lang="zh-CN">
+<html lang="${escapeHtml(i18nConfig.defaultLang)}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +75,7 @@ export function renderPage(payload) {
         <button class="menu-button" type="button" aria-expanded="false" aria-controls="sidebar">导航</button>
         <div class="topbar-right">
           <nav class="top-nav">${navHtml}</nav>
-          ${rightButtonsHtml}
+          ${headerUtilityHtml}
         </div>
       </header>
 
@@ -88,6 +93,7 @@ export function renderPage(payload) {
         </aside>
       </div>
     </div>
+    ${i18nConfigScript}
     <script type="module" src="/assets/app.js"></script>
   </body>
 </html>`;
@@ -116,6 +122,14 @@ function renderBrand(logo, siteName) {
   return `${imageHtml}<span class="brand-text">${escapeHtml(text)}</span>`;
 }
 
+function renderHeaderUtility(i18nControlHtml, rightButtonsHtml) {
+  const segments = [];
+  if (i18nControlHtml) segments.push(i18nControlHtml);
+  if (rightButtonsHtml) segments.push(rightButtonsHtml);
+  if (!segments.length) return "";
+  return `<div class="header-utility">${segments.join("")}</div>`;
+}
+
 function renderRightButtons(buttons) {
   const validButtons = buttons.filter((button) => button.text && button.link);
   if (!validButtons.length) return "";
@@ -129,6 +143,38 @@ function renderRightButtons(buttons) {
     .join("");
 
   return `<div class="header-actions">${links}</div>`;
+}
+
+function renderI18nControl(i18nConfig) {
+  if (!i18nConfig.enabled || i18nConfig.languages.length < 2) return "";
+
+  const options = i18nConfig.languages
+    .map((language) => {
+      const selected = language.code === i18nConfig.defaultLang ? " selected" : "";
+      return `<option value="${escapeHtml(language.code)}"${selected}>${escapeHtml(language.label)}</option>`;
+    })
+    .join("");
+
+  return `<label class="language-switcher" data-i18n-skip><span class="language-label">语言</span><select class="language-select" data-i18n-switcher>${options}</select></label>`;
+}
+
+function renderI18nConfigScript(i18nConfig) {
+  if (!i18nConfig.enabled || i18nConfig.languages.length < 2) return "";
+  const serialized = serializeJsonForHtml({
+    enabled: i18nConfig.enabled,
+    endpoint: i18nConfig.endpoint,
+    sourceLang: i18nConfig.sourceLang,
+    defaultLang: i18nConfig.defaultLang,
+    altCount: i18nConfig.altCount,
+    cache: i18nConfig.cache,
+    autoApplySaved: i18nConfig.autoApplySaved,
+    languages: i18nConfig.languages
+  });
+  return `<script id="i18n-config" type="application/json">${serialized}</script>`;
+}
+
+function serializeJsonForHtml(value) {
+  return JSON.stringify(value).replace(/</gu, "\\u003c");
 }
 
 function normalizeHeaderConfig(siteName, header) {
@@ -167,6 +213,65 @@ function normalizeHeaderButton(button) {
     newTab: Boolean(source.newTab),
     style: source.style === "filled" ? "filled" : "outline"
   };
+}
+
+function normalizeI18nConfig(i18n) {
+  const source = i18n || {};
+  const sourceLang = normalizeLanguageCode(source.sourceLang || "zh");
+  const defaultLang = normalizeLanguageCode(source.defaultLang || sourceLang);
+  const languages = normalizeLanguages(source.languages, sourceLang, defaultLang);
+
+  return {
+    enabled: source.enabled === true,
+    endpoint:
+      typeof source.endpoint === "string" && source.endpoint.trim()
+        ? source.endpoint.trim()
+        : "https://deepl.io.hk.cn/translate",
+    sourceLang,
+    defaultLang,
+    altCount: normalizeAltCount(source.altCount),
+    cache: source.cache !== false,
+    autoApplySaved: source.autoApplySaved !== false,
+    languages
+  };
+}
+
+function normalizeLanguages(languages, sourceLang, defaultLang) {
+  const normalizedList = Array.isArray(languages)
+    ? languages
+        .map((language) => {
+          const code = normalizeLanguageCode(language?.code || "");
+          const label =
+            typeof language?.label === "string" && language.label.trim()
+              ? language.label.trim()
+              : code.toUpperCase();
+          return { code, label };
+        })
+        .filter((language) => Boolean(language.code))
+    : [];
+
+  const knownCodes = new Set(normalizedList.map((language) => language.code));
+  if (!knownCodes.has(sourceLang)) {
+    normalizedList.unshift({ code: sourceLang, label: sourceLang.toUpperCase() });
+    knownCodes.add(sourceLang);
+  }
+  if (!knownCodes.has(defaultLang)) {
+    normalizedList.push({ code: defaultLang, label: defaultLang.toUpperCase() });
+  }
+
+  return normalizedList;
+}
+
+function normalizeLanguageCode(code) {
+  if (typeof code !== "string") return "zh";
+  const normalized = code.trim().toLowerCase();
+  return normalized || "zh";
+}
+
+function normalizeAltCount(value) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0) return 0;
+  return Math.min(parsed, 3);
 }
 
 function normalizeHeaderBackground(background) {
