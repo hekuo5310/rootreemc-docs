@@ -22,7 +22,7 @@ export default {
     ]
   },
   i18n: {
-    enabled: true,
+    enabled: false,
     endpoint: "/api/translate",
     sourceLang: "zh",
     defaultLang: "zh",
