@@ -159,6 +159,43 @@ a {
   padding-left: 1.4rem;
 }
 
+.doc .task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.doc .task-list-item {
+  margin: 0.4rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.doc .task-list-marker {
+  width: 15px;
+  height: 15px;
+  margin-top: 4px;
+  border: 1px solid #000000;
+  display: inline-block;
+  position: relative;
+}
+
+.doc .task-list-item.checked .task-list-marker::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  transform: rotate(45deg);
+}
+
+.doc .task-list-item.checked .task-list-content {
+  color: #222222;
+}
+
 .doc pre {
   background: #ffffff;
   border: 1px solid var(--border);

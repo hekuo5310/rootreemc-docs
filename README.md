@@ -81,6 +81,18 @@ order: 2
 > 你好
 ```
 
+## Markdown Task List
+
+支持任务列表（Task List）语法：
+
+```md
+- [x] 玩家链接协议
+- [ ] Spigot插件支持
+- [ ] TFL插件([旧版仓库](https://github.com/hekuo5310/TranforCpp))支持
+```
+
+该语法会渲染为任务列表组件（`task-list` / `task-list-item checked|pending`），不是表单输入控件。
+
 ## 配置
 
 在 `docs.config.mjs` 中配置站点标题、输出目录与导航项。

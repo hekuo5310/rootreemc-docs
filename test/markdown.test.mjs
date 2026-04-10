@@ -34,3 +34,26 @@ test("parseMarkdown should support admonition blocks", () => {
   assert.match(html, /<p class="admonition-title">警告<\/p>/);
   assert.match(html, /这个比较并不完全公平/);
 });
+
+test("parseMarkdown should support task list syntax", () => {
+  const markdown = `- [x] 玩家链接协议
+- [x] 方块
+- [x] 生物(和他们的ai，虽然很智障就是了)
+- [x] 地形生成
+- [x] LINEAR V2存档(包含mca自动转换)
+- [x] 方块Tick逻辑
+- [x] 玩家链接协议
+- [ ] 更多原版特性！
+- [ ] TFL插件([另一个项目,直接合并到Rootree了,只有旧版的有仓库](https://github.com/hekuo5310/TranforCpp))支持
+- [ ] Spigot插件支持
+- [ ] 对非1.12.2玩家协议的支持（更建议套viaproxy）
+- [ ] 对基岩版玩家的支持`;
+
+  const { html } = parseMarkdown(markdown);
+  assert.match(html, /<ul class="task-list">/);
+  assert.match(html, /<li class="task-list-item checked">/);
+  assert.match(html, /<li class="task-list-item pending">/);
+  assert.match(html, /<span class="task-list-marker" aria-hidden="true"><\/span>/);
+  assert.match(html, /<a href="https:\/\/github\.com\/hekuo5310\/TranforCpp">/);
+  assert.match(html, /对基岩版玩家的支持/);
+});

@@ -34,9 +34,10 @@ export function parseMarkdown(markdown, options = {}) {
     if (!listState) return;
     const tag = listState.type === "ordered" ? "ol" : "ul";
     const items = listState.items
-      .map((item) => `<li>${parseInline(item, resolveLink)}</li>`)
+      .map((item) => renderListItem(item, resolveLink))
       .join("");
-    htmlParts.push(`<${tag}>${items}</${tag}>`);
+    const listClass = items.includes("task-list-item") ? ' class="task-list"' : "";
+    htmlParts.push(`<${tag}${listClass}>${items}</${tag}>`);
     listState = null;
   }
 
@@ -218,6 +219,21 @@ function parseInline(text, resolveLink) {
   parsed = parsed.replace(/%%CODETOKEN(\d+)%%/gu, (_, index) => codeTokens[Number(index)] || "");
 
   return parsed;
+}
+
+function renderListItem(item, resolveLink) {
+  const taskMatch = item.match(/^\[( |x|X)\]\s+(.+)$/u);
+  if (!taskMatch) {
+    return `<li>${parseInline(item, resolveLink)}</li>`;
+  }
+
+  const checked = taskMatch[1].toLowerCase() === "x";
+  const text = taskMatch[2];
+  const stateClass = checked ? "checked" : "pending";
+  return `<li class="task-list-item ${stateClass}"><span class="task-list-marker" aria-hidden="true"></span><span class="task-list-content">${parseInline(
+    text,
+    resolveLink
+  )}</span></li>`;
 }
 
 function alertTitleByType(type) {
