@@ -24,3 +24,13 @@ Paragraph with **bold** and [link](./next.md) plus \`inline\`.
   assert.match(html, /<code>inline<\/code>/);
   assert.match(html, /<ul><li>one<\/li><li>two<\/li><\/ul>/);
 });
+
+test("parseMarkdown should support admonition blocks", () => {
+  const markdown = `> [!WARNING]
+> 这个比较并不完全公平 Pumpkin 目前的功能远少于其他服务器。`;
+
+  const { html } = parseMarkdown(markdown);
+  assert.match(html, /<aside class="admonition admonition-warning">/);
+  assert.match(html, /<p class="admonition-title">警告<\/p>/);
+  assert.match(html, /这个比较并不完全公平/);
+});

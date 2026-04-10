@@ -1,27 +1,25 @@
 ---
-title: Rootree 文档系统
+title: Rootree
 order: 1
 ---
 
-# Rootree 文档系统
+# Rootree
 
-这是一个对标 VuePress 的极简静态文档系统，默认会将 `docs/` 下的 Markdown 文件自动渲染为 HTML 页面。
+这是一个Minecraft的**非官方**服务端，使用GO开发
 
-## 系统特性
+> [!WARNING]
+> 虽然Rootree确实性能很强，**但是！**这是个**半成品**！***不建议***用于生产环境！
 
-- 自动扫描 Markdown 并生成页面路由
-- 提供顶部导航、左侧文档结构与右侧页面目录
-- 全站白底、黑色文字与黑色边框按钮
-- 提供 `build` 与 `dev` 两个核心命令
-
-## 快速开始
-
-1. 运行 `npm run build` 生成静态站点
-2. 输出目录为 `dist/`
-3. 本地预览可运行 `npm run dev`
-
-## 下一步
-
-- 继续阅读 [快速上手](./guide/getting-started.md)
-- 查看 [路由机制](./guide/routing.md)
-
+## 开发清单
+- [x] 玩家链接协议
+- [x] 方块
+- [x] 生物(和他们的ai，虽然很智障就是了)
+- [x] 地形生成
+- [x] LINEAR V2存档(包含mca自动转换)
+- [x] 方块Tick逻辑
+- [x] 玩家链接协议
+- [ ] 更多原版特性！
+- [ ] TFL插件([另一个项目,直接合并到Rootree了,只有旧版的有仓库](https://github.com/hekuo5310/TranforCpp))支持
+- [ ] Spigot插件支持
+- [ ] 对非1.12.2玩家协议的支持（更建议套viaproxy）
+- [ ] 对基岩版玩家的支持

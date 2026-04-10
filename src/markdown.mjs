@@ -42,6 +42,25 @@ export function parseMarkdown(markdown, options = {}) {
 
   function flushQuote() {
     if (!quoteBuffer.length) return;
+    const firstLine = quoteBuffer[0].trim();
+    const alertMatch = firstLine.match(/^\[!([a-z]+)\](?:\s+(.+))?$/iu);
+
+    if (alertMatch) {
+      const alertType = alertMatch[1].toLowerCase();
+      const explicitTitle = alertMatch[2]?.trim() || "";
+      const title = explicitTitle || alertTitleByType(alertType);
+      const bodyText = quoteBuffer.slice(1).join(" ").trim();
+      const bodyHtml = bodyText ? `<p>${parseInline(bodyText, resolveLink)}</p>` : "";
+      htmlParts.push(
+        `<aside class="admonition admonition-${escapeHtml(alertType)}"><p class="admonition-title">${parseInline(
+          title,
+          resolveLink
+        )}</p>${bodyHtml}</aside>`
+      );
+      quoteBuffer.length = 0;
+      return;
+    }
+
     const quote = parseInline(quoteBuffer.join(" "), resolveLink);
     htmlParts.push(`<blockquote><p>${quote}</p></blockquote>`);
     quoteBuffer.length = 0;
@@ -199,4 +218,14 @@ function parseInline(text, resolveLink) {
   parsed = parsed.replace(/%%CODETOKEN(\d+)%%/gu, (_, index) => codeTokens[Number(index)] || "");
 
   return parsed;
+}
+
+function alertTitleByType(type) {
+  const key = String(type).toLowerCase();
+  if (key === "note") return "提示";
+  if (key === "tip") return "技巧";
+  if (key === "important") return "重要";
+  if (key === "warning") return "警告";
+  if (key === "caution") return "注意";
+  return key.toUpperCase();
 }

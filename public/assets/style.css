@@ -176,6 +176,41 @@ a {
   border-left: 2px solid var(--border);
 }
 
+.doc .admonition {
+  margin: 1.4rem 0;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #000000;
+}
+
+.doc .admonition-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doc .admonition p {
+  margin: 0.7rem 0 0;
+}
+
+.doc .admonition-warning {
+  background: #3b1d27;
+  border-color: #3b1d27;
+  color: #ffffff;
+}
+
+.doc .admonition-warning a {
+  color: #ffffff;
+}
+
+.doc .admonition-warning code {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0 4px;
+}
+
 .pager {
   margin-top: 28px;
   display: flex;
@@ -267,4 +302,3 @@ a {
     padding: 22px 18px 32px;
   }
 }
-
