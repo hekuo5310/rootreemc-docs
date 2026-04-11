@@ -20,6 +20,5 @@ order: 1
 - [x] 玩家链接协议
 - [ ] 更多原版特性！
 - [ ] TFL插件([另一个项目,直接合并到Rootree了,只有旧版的有仓库](https://github.com/hekuo5310/TranforCpp))支持
-- [ ] Spigot插件支持
 - [ ] 对非1.12.2玩家协议的支持（更建议套viaproxy）
 - [ ] 对基岩版玩家的支持
